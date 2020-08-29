@@ -1,8 +1,12 @@
 import React, {useState} from 'react';
-import {Segment, Form, Button} from 'semantic-ui-react';
-import {Link} from 'react-router-dom';
+import { Segment, Form, Button } from 'semantic-ui-react';
+import { Link } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { updateEvent, createEvent } from '../../events/eventAction';
 
-const EventForm = ({ setFormOpen, handleCreateEvent, selectedEvent, updateEvent }) => {
+const EventForm = ({ match, history }) => {
+  const dispatch = useDispatch();
+  const selectedEvent = useSelector(state => state.event.events.find(evt => evt.id === match.params.id));
   const initialValues = selectedEvent ?? {
     title: '',
     category: '',
@@ -11,19 +15,18 @@ const EventForm = ({ setFormOpen, handleCreateEvent, selectedEvent, updateEvent 
     venue: '',
     date: ''
   };
-
   const [values, setValues] = useState(initialValues);
 
   function handleFormSubmit() {
-    selectedEvent ? updateEvent({...selectedEvent, ...values}) 
-    : handleCreateEvent({
+    selectedEvent ? dispatch(updateEvent({...selectedEvent, ...values}))
+    : dispatch(createEvent({
       ...values, 
       id: (Math.random + 1),
       hostPhotoURL: '/assets/user.png',
       hostedBy: 'Eden',
       attendees: []
-    })
-    setFormOpen(false)
+    }))
+    history.push('/events');
   }
 
   function handleInputChange(e) {
