@@ -1,15 +1,19 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import "semantic-ui-css/semantic.min.css";
+import "react-calendar/dist/Calendar.css";
 import './style.css';
 import App from "./App/layout/App";
 import * as serviceWorker from "./serviceWorker";
-import {BrowserRouter} from 'react-router-dom';
-import {Provider} from 'react-redux';
+import { BrowserRouter } from 'react-router-dom';
+import { Provider } from 'react-redux';
 import createStore from './App/store/configStore';
 import ScrollToTop from './App/layout/ScrollToTop';
+import { loadEvents } from './features/events/eventAction';
 
 const store = createStore();
+
+store.dispatch(loadEvents());
 
 ReactDOM.render(
   <Provider store={store}>
