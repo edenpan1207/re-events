@@ -8,6 +8,7 @@ import EventDetailPage from '../../features/events/eventDetail/EventDetailPage';
 import EventForm from '../../features/events/eventForm/EventForm';
 import SandBox from '../../features/sandbox/SandBox';
 import ModalManager from '../common/modal/ModalManager';
+import ErrorComponent from '../common/errors/ErrorComponent';
 
 function App() {
   const location = useLocation();
@@ -24,6 +25,7 @@ function App() {
             <Route exact path="/sandbox" component={SandBox} />
             <Route path="/events/:id" component={EventDetailPage} />
             <Route path={[`/createEvent`, `/manage/:id`]} component={EventForm} key={location.key} />
+            <Route path="/error" component={ErrorComponent} />
           </Container>
         </>
       )} />

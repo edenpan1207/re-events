@@ -3,27 +3,34 @@ import { asyncActionStart, asyncActionFinish, asyncActionError } from '../../App
 import { fetchSampleData } from '../../App/api/mockApi';
 
 export const loadEvents = () => {
-  // return async function (dispatch) {
-  //   dispatch(asyncActionStart());
-  //   try {
-  //     const events = await fetchSampleData();
-  //     dispatch({ type: FETCH_EVENTS, payload: events });
-  //     dispatch(asyncActionFinish());
-  //   } catch(error) {
-  //     dispatch(asyncActionError(error));
-  //   }
-  // }
-
-  return dispatch => {
+  // async await
+  return async function (dispatch) {
     dispatch(asyncActionStart());
-    fetchSampleData().then(data => {
-      dispatch({ type: FETCH_EVENTS, payload: data });
+    try {
+      const events = await fetchSampleData();
+      dispatch({ type: FETCH_EVENTS, payload: events });
       dispatch(asyncActionFinish());
-    }).catch(error => {
+    } catch(error) {
       dispatch(asyncActionError(error));
-    })
+    }
   }
+
+  // promise
+  // return dispatch => {
+  //   dispatch(asyncActionStart());
+  //   fetchSampleData().then(data => {
+  //     dispatch({ type: FETCH_EVENTS, payload: data });
+  //     dispatch(asyncActionFinish());
+  //   }).catch(error => {
+  //     dispatch(asyncActionError(error));
+  //   })
+  // }
 }
+
+export const listenToEvents = events => ({
+  type: FETCH_EVENTS, 
+  payload: events
+})
 
 export const createEvent = event => ({
   type: CREATE_EVENT,
