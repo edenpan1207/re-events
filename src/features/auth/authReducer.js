@@ -13,7 +13,10 @@ const authReducer = (state = initialValue, { type, payload }) => {
         authenticated: true, 
         currentUser: {
           email: payload.email,
-          photoURL: '/assets/user.png'
+          photoURL: payload.photoURL,
+          displayName: payload.displayName,
+          uid: payload.uid,
+          providerId: payload.providerData[0].providerId
         }
       }
     case SIGN_OUT_USER:

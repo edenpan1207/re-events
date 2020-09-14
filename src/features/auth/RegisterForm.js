@@ -6,17 +6,19 @@ import ModalWrapper from '../../App/common/modal/ModalWrapper';
 import TextInput from '../../App/common/form/textInput';
 import { useDispatch } from 'react-redux';
 import { closeModal } from '../../App/common/modal/modalReducer';
-import { signInWithEmail } from '../../App/firestore/firebaseService';
+import { registerInFirestore } from '../../App/firestore/firebaseService';
 import SocialLogin from './SocialLogin';
 
-const LoginForm = () => {
+const RegisterForm = () => {
   const dispatch = useDispatch();
   const initialValues = {
+    displayName: '',
     email: '',
     password: ''
   }
 
   const validationSchema = Yup.object().shape({
+    displayName: Yup.string().required('Required Name'),
     email: Yup.string().email('Invalid Email').required('Required Email'),
     password: Yup.string().required('Required Password')
   })
@@ -28,7 +30,7 @@ const LoginForm = () => {
         validationSchema={validationSchema}
         onSubmit={async (values, actions) => {
           try {
-            await signInWithEmail(values);
+            await registerInFirestore(values);
             actions.setSubmitting(false);
             dispatch(closeModal());
           } catch(error) {
@@ -40,6 +42,7 @@ const LoginForm = () => {
         {
           ({ dirty, isSubmitting, isValid, errors }) => (
             <Form className="ui form">
+              <TextInput name="displayName" placeholder="DisplayName" />
               <TextInput name="email" placeholder="Address Email" />
               <TextInput type="password" name="password" placeholder="Password" />
               {
@@ -52,7 +55,7 @@ const LoginForm = () => {
                 fluid
                 size="large"
                 color="teal"
-                content="Login" 
+                content="Register" 
               />
               <Divider horizontal>Or</Divider>
               <SocialLogin />
@@ -66,4 +69,4 @@ const LoginForm = () => {
   )
 }
 
-export default LoginForm
+export default RegisterForm;
