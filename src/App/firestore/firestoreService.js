@@ -1,14 +1,14 @@
-import firebase from '../config/firebase';
+import firebase from "../config/firebase";
 
 const db = firebase.firestore();
 
 export const dataFromSnapshot = (snapshot) => {
-  if(!snapshot) return undefined;
-  const data = snapshot.data(); 
+  if (!snapshot) return undefined;
+  const data = snapshot.data();
 
-  for(const prop in data) {
-    if(data.hasOwnProperty(prop)) {
-      if(data[prop] instanceof firebase.firestore.Timestamp) {
+  for (const prop in data) {
+    if (data.hasOwnProperty(prop)) {
+      if (data[prop] instanceof firebase.firestore.Timestamp) {
         data[prop] = data[prop].toDate();
       }
     }
@@ -16,20 +16,20 @@ export const dataFromSnapshot = (snapshot) => {
 
   return {
     ...data,
-    id: snapshot.id
-  }
-}
+    id: snapshot.id,
+  };
+};
 
 export const listenToEventsFromFirestore = () => {
-  return db.collection('events').orderBy('date');
-}
+  return db.collection("events").orderBy("date");
+};
 
 export const listenToEventFromFirestore = (eventId) => {
-  return db.collection('events').doc(eventId);
-}
+  return db.collection("events").doc(eventId);
+};
 
 export const addEventToFirestore = (event) => {
-  return db.collection('events').add({
+  return db.collection("events").add({
     ...event,
     hostedBy: "Bob",
     hostPhotoURL: "https://randomuser.me/api/portraits/men/20.jpg",
@@ -37,28 +37,51 @@ export const addEventToFirestore = (event) => {
       id: "a",
       displayName: "Bob",
       photoURL: "https://randomuser.me/api/portraits/men/20.jpg",
-    })
-  })
-}
+    }),
+  });
+};
 
 export const updateEventInFirestore = (event) => {
-  return db.collection('events').doc(event.id).update(event);
-}
+  return db.collection("events").doc(event.id).update(event);
+};
 
 export const deleteEventFirestore = (eventId) => {
-  return db.collection('events').doc(eventId).delete();
-}
+  return db.collection("events").doc(eventId).delete();
+};
 export const cancelEventToggle = (event) => {
-  return db.collection('events').doc(event.id).update({
-    isCancelled: !event.isCancelled
-  })
-}
+  return db.collection("events").doc(event.id).update({
+    isCancelled: !event.isCancelled,
+  });
+};
 
 export const setUserProfileData = (user) => {
-  return db.collection('users').doc(user.uid).set({
-    displayName: user.displayName,
-    email: user.email,
-    photoURL: user.photoURL || null,
-    createdAt: firebase.firestore.FieldValue.serverTimestamp()
-  })
-}
+  return db
+    .collection("users")
+    .doc(user.uid)
+    .set({
+      displayName: user.displayName,
+      email: user.email,
+      photoURL: user.photoURL || null,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+    });
+};
+
+export const getUserProfile = (userId) => {
+  return db.collection("users").doc(userId);
+};
+
+export const updateUserProfile = async (profile) => {
+  const user = firebase.auth().currentUser;
+
+  try {
+    if (user.displayName !== profile.displayName) {
+      await user.updateProfile({
+        displayName: profile.displayName,
+      });
+    }
+
+    return await db.collection("users").doc(user.uid).update(profile);
+  } catch (error) {
+    throw Error(error.message);
+  }
+};
