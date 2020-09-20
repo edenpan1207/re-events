@@ -1,14 +1,11 @@
 import React from "react";
 import { Segment, Item, Icon, List, Button, Label } from "semantic-ui-react";
 import { Link } from 'react-router-dom';
-import { useDispatch } from "react-redux";
 import { format } from 'date-fns'
 import EventListAttendee from "./EventListAttendee";
-import { deleteEvent } from '../eventAction';
 import { deleteEventFirestore } from '../../../App/firestore/firestoreService';
 
 const EventListItem = ({ event }) => {
-  const dispatch = useDispatch();
   return (
     <Segment.Group>
       <Segment>

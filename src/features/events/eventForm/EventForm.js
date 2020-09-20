@@ -6,7 +6,6 @@ import { useSelector, useDispatch } from "react-redux";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import { Redirect } from 'react-router-dom';
-import { updateEvent, createEvent } from "../../events/eventAction";
 import TextInput from "../../../App/common/form/textInput";
 import TextAreaInput from "../../../App/common/form/textAreaInput";
 import SelectInput from "../../../App/common/form/selectInput";
